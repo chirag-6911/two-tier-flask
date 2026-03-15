@@ -38,6 +38,10 @@ services:
     depends_on:
       - mysql
     restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000"]
+      interval: 10s
+      retries: 5
 
 volumes:
   mysql-data:
