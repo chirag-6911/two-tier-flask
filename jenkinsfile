@@ -1,0 +1,42 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('pulling') {
+            steps {
+                git branch: 'main', url:'https://github.com/chirag-6911/two-tier-flask.git'
+            }
+        }
+        stage('build image '){
+            steps{
+                sh 'docker build -t flask-app .'
+            }
+        }
+        stage('runing container'){
+            steps{
+                sh 'docker compose down || true'
+                sh 'docker compose up -d --build'
+            }
+        }
+    }    
+    post {
+
+        success {
+            emailext(
+                subject: "SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: "Build completed successfully.\n${env.BUILD_URL}",
+                to: "chikki0099@gmail.com"
+            )
+        }
+
+        failure {
+            emailext(
+                subject: "FAILURE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: "Build failed.\nCheck logs: ${env.BUILD_URL}",
+                to: "your-email@gmail.com",
+                attachLog: true
+            )
+        }
+    
+    }
+}
