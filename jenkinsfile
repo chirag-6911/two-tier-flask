@@ -33,7 +33,7 @@ pipeline {
             emailext(
                 subject: "FAILURE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: "Build failed.\nCheck logs: ${env.BUILD_URL}",
-                to: "your-email@gmail.com",
+                to: "chikki0099@gmail.com",
                 attachLog: true
             )
         }
